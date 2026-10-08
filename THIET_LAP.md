@@ -24,15 +24,15 @@ Mỗi người mua sở hữu Sheet, Calendar, repository và website riêng. Ph
 9. Với luồng token phía trình duyệt dự kiến, để trống Authorized redirect URIs. Nếu kiến trúc xác thực sau này thay đổi, phải cập nhật theo triển khai thực tế.
 10. Create; lưu Client ID (đuôi apps.googleusercontent.com) để cấu hình ứng dụng. Client ID là mã định danh công khai; không gửi hoặc commit Client Secret, token, khóa service account.
 
-Đây là các quyền đọc dành cho bản kiểm tra kết nối 0.1. Chức năng ghi dữ liệu sẽ cần cấp quyền bổ sung khi được triển khai. Kết nối Drive trong chat không tự cấp quyền cho website.
+Đây là các quyền đọc dành cho bản xem dữ liệu 0.2. Chức năng ghi dữ liệu sẽ cần cấp quyền bổ sung khi được triển khai. Kết nối Drive trong chat không tự cấp quyền cho website.
 
 ## Kiểm tra trên website
 
-1. Mở website Pages, bấm Kết nối Google rồi chọn tài khoản trong danh sách Test users.
-2. Dán link Sheet vào ô Google Sheets, bấm Lưu nguồn rồi Kiểm tra. Trang sẽ hiển thị tên file và tiêu đề các bảng đọc được.
-3. Bấm Lấy danh sách lịch của tôi, chọn lịch rồi bấm Kiểm tra cạnh nguồn lịch. Trang hiển thị tối đa 30 sự kiện trong 7 ngày tới.
+1. Mở website Pages, bấm Tiếp tục với Google rồi chọn tài khoản trong danh sách Test users. Nếu đã lưu nguồn hoặc mở link khởi động có cấu hình sẵn, ứng dụng tự mở bảng Lớp học.
+2. Chỉ khi chưa có nguồn: vào Cài đặt, dán link Sheet vào ô Google Sheets rồi bấm Lưu nguồn.
+3. Trong Cài đặt, bấm Lấy danh sách lịch của tôi rồi chọn lịch. Bấm Về lớp học và sử dụng các mục bên trái. Không cần bấm Kiểm tra nguồn để sử dụng; nút đó chỉ dành cho việc chẩn đoán trong Cài đặt.
 4. Có thể thêm nhiều nguồn. Bỏ nguồn chỉ bỏ cấu hình trên trình duyệt, không xoá file hoặc lịch Google.
-5. Khi đóng hoặc tải lại trang, bấm Kết nối Google lại. Token không được lưu lâu dài; link/ID đã nhập vẫn có trong cấu hình.
+5. Khi đóng hoặc tải lại trang, bấm Tiếp tục với Google. Token không được lưu lâu dài; link/ID đã nhập vẫn có trong cấu hình. Khi xem bảng, tìm kiếm và chuyển lại mục đã mở không gửi thêm lượt đọc; nút Tải lại lấy dữ liệu mới từ Google.
 
 Người mua có địa chỉ Pages khác phải mở Cấu hình ứng dụng Google trên website và nhập Client ID của chính mình; trang không tự dùng Client ID MK trên tên miền khác. Không tải Client secret lên GitHub.
 

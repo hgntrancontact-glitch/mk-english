@@ -3,22 +3,24 @@
 
 ## Trạng thái
 
-Đã có trang **Cài đặt kết nối** chạy trên GitHub Pages: đăng nhập Google, lưu nhiều nguồn Sheets/Calendar, kiểm tra tiêu đề của 8 bảng và xem tối đa 30 sự kiện trong 7 ngày tới. Không cần GAS cho phần đọc dữ liệu.
+Đã có màn hình chào và **Tiếp tục với Google**, tự mở Lớp học sau khi đăng nhập với nguồn đã lưu. Sidebar xem 8 bảng và lịch trong 7 ngày tới, tìm kiếm cục bộ, phân trang bảng 100 dòng và bộ nhớ đệm trong phiên. Cài đặt riêng cho việc đổi/thêm nguồn Sheets và Calendar. Không cần GAS cho phần đọc dữ liệu.
 
-Đây là bản kiểm tra kết nối 0.1, **chưa phải ứng dụng quản lý hoàn chỉnh**. Chưa có nhập/sửa, điểm danh, thu phí, chăm sóc, báo cáo hoặc menu Sheets mới. Đã kiểm thử cục bộ với OAuth/API giả lập; chưa xác nhận đăng nhập thật của chủ tài khoản.
+Đây là bản xem dữ liệu 0.2, **chưa phải ứng dụng quản lý hoàn chỉnh**. Có xem các bảng Điểm danh/Học phí/Chăm sóc; chưa có thao tác ghi, tạo điểm danh, thu phí, chăm sóc, báo cáo hoặc menu Sheets mới. Calendar hiện là danh sách 7 ngày, tối đa 250 sự kiện; chưa có lưới lịch chỉnh sửa. Đã kiểm thử cục bộ với OAuth/API giả lập; chưa xác nhận đăng nhập thật của chủ tài khoản.
 
 ## Mở và thử kết nối
 
 1. Bật Pages: Settings → Pages → Deploy from a branch → main → /(root) → Save.
-2. Mở địa chỉ Pages của repository → Kết nối Google → chọn tài khoản đã thêm vào Test users.
-3. Google Sheets: dán link → Lưu nguồn → Kiểm tra.
-4. Calendar: Lấy danh sách lịch của tôi → chọn lịch → Kiểm tra.
+2. Mở địa chỉ Pages của repository → Tiếp tục với Google → chọn tài khoản đã thêm vào Test users. Nếu đã lưu nguồn, ứng dụng tự mở dữ liệu; không cần kiểm tra từng nguồn.
+3. Nếu chưa có nguồn, vào Cài đặt → Google Sheets: dán link → Lưu nguồn. Calendar: Lấy danh sách lịch của tôi → chọn lịch.
+4. Bấm Về lớp học. Những lần sau chỉ cần đăng nhập, nguồn đã lưu được dùng tự động. Chọn Tải lại để lấy các chỉnh sửa trực tiếp từ Google.
+
+Bộ bàn giao có thể kèm link khởi động riêng với cấu hình nguồn trong fragment `#setup=`. Ứng dụng lưu cấu hình trên trình duyệt rồi xoá fragment trước khi tải dịch vụ đăng nhập. Không đưa ID nguồn riêng hoặc link khởi động vào repository công khai. Cấu hình này không chứa token và không thay thế quyền Google.
 
 Website chỉ yêu cầu quyền đọc trong bản này. Token chỉ ở bộ nhớ phiên; tải lại trang cần kết nối lại. Link/ID nguồn được lưu riêng trên trình duyệt; dữ liệu học sinh và nội dung lịch không được lưu lên GitHub.
 
 ## Kiểm thử
 
-`npm test` chạy 5 kiểm thử bộ xử lý link, cấu hình, lỗi API và khoảng lịch. Không cần cài dependency. Kiểm thử trình duyệt cục bộ bổ sung đã chạy 9 nhóm với Google giả lập; các kết quả này không đo độ trễ Google thật.
+`npm test` chạy 6 kiểm thử bộ xử lý link, cấu hình, lỗi API và khoảng lịch. Không cần cài dependency. Kiểm thử trình duyệt cục bộ bổ sung đã chạy 12 nhóm với Google giả lập, gồm mở dữ liệu tự động, bộ nhớ đệm, hết phiên và phản hồi đến sau đăng xuất; các kết quả này không đo độ trễ Google thật.
 
 ## Hướng triển khai
 

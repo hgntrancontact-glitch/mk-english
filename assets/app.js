@@ -1,5 +1,6 @@
 import {DEFAULT_CLIENT_ID, DEFAULT_ORIGIN, SCOPES, EXPECTED_TABS} from './config.js';
-import {sheetId, calendarId, validClientId, readSettings, apiError, calendarWindow} from './core.js';
+import {sheetId, calendarId, validClientId, readSettings, apiError, calendarWindow, importSetup} from './core.js';
+import {createWorkspace} from './workspace.js';
 
 const $ = id => document.getElementById(id);
 const storageKey = `mk-english:${location.pathname}:connections:v1`;
@@ -9,6 +10,29 @@ let settings = readSettings(browserStorage, storageKey, ownOrigin ? DEFAULT_CLIE
 let token = '', expires = 0, generation = 0, sdkReady = false, expiryTimer;
 const activeReads = new Set();
 const revisions = {sheet: 0, calendar: 0, list: 0};
+const workspace = createWorkspace({getGoogle,getSettings:()=>settings,onSettings:showSettings,onError:message=>notice(message,true)});
+
+// Consume the personal launch configuration before loading Google's script.
+const setup = new URLSearchParams(location.hash.slice(1)).get('setup');
+if (setup !== null) {
+  history.replaceState(null,'',location.pathname+location.search);
+  try { persist(importSetup(setup,settings)); }
+  catch { notice('Chưa lưu được cấu hình khởi động. Bạn có thể thêm nguồn trong Cài đặt.',true); }
+}
+
+function showSettings() {
+  workspace.leave();
+  $('welcome').hidden=true;$('app-shell').hidden=false;$('data-screen').hidden=true;$('connections').hidden=false;
+  $('breadcrumb').textContent='Cài đặt';
+  document.querySelectorAll('[data-route]').forEach(b=>{b.classList.remove('active');b.removeAttribute('aria-current');});
+  $('settings-nav').classList.add('active');
+}
+function showWelcome() { $('welcome').hidden=false;$('app-shell').hidden=true; }
+function enterWorkspace() { if(!connected()){showWelcome();return;} notice('');workspace.open('Lớp học'); }
+$('welcome-settings').onclick=showSettings;
+$('settings-nav').onclick=showSettings;
+$('back-workspace').onclick=enterWorkspace;
+$('sidebar-signout').onclick=()=>{disconnect();notice('');};
 
 function el(tag, text, className) {
   const element = document.createElement(tag);
@@ -18,13 +42,14 @@ function el(tag, text, className) {
 }
 function notice(message, error = false) {
   $('notice').textContent = message;
-  $('notice').className = `notice${error ? ' error' : ''}`;
+  $('notice').className = `notice floating-notice${error ? ' error' : ''}`;
   $('notice').hidden = !message;
 }
 function persist(next) {
   try { localStorage.setItem(storageKey, JSON.stringify(next)); }
   catch { throw new Error('Trình duyệt không cho lưu cấu hình. Cho phép lưu dữ liệu trang web rồi thử lại.'); }
   settings = next;
+  workspace.invalidate();
 }
 function connected() { return Boolean(token && Date.now() < expires); }
 function refreshAuth() {
@@ -34,6 +59,9 @@ function refreshAuth() {
   $('disconnect').hidden = !yes;
   $('connect').textContent = yes ? 'Đổi tài khoản' : 'Kết nối Google';
   $('connect').disabled = !sdkReady;
+  $('welcome-connect').disabled=!sdkReady;
+  $('welcome-status').textContent=sdkReady?'Chọn tài khoản Google của bạn để tiếp tục.':'Đang chuẩn bị đăng nhập…';
+  $('welcome-description').textContent=settings.sheets.length?'Nguồn dữ liệu đã sẵn sàng. Tiếp tục với Google để mở lớp học của bạn.':'Đăng nhập bằng tài khoản Google quản lý lớp học để bắt đầu.';
   document.querySelectorAll('[data-auth]').forEach(b => { b.disabled = !yes; });
   $('auth-status').textContent = yes ? 'Sẵn sàng kiểm tra nguồn dữ liệu' : sdkReady ? 'Đăng nhập để bắt đầu' : 'Chưa tải được dịch vụ đăng nhập';
 }
@@ -43,6 +71,7 @@ function disconnect() {
   for (const request of activeReads) request.abort();
   activeReads.clear();
   ['sheet-preview','calendar-preview','calendar-choices'].forEach(id => $(id).replaceChildren());
+  workspace.clear();showWelcome();
   refreshAuth();
 }
 
@@ -166,7 +195,7 @@ $('save-client').addEventListener('click', () => {
     const id = $('client-id').value.trim();
     if (!validClientId(id)) throw new Error('Client ID cần có đuôi .apps.googleusercontent.com.');
     persist({...settings,clientId:id}); disconnect();
-    notice('Đã lưu Client ID. Bấm Kết nối Google để đăng nhập.');
+    notice('Đã lưu cấu hình ứng dụng. Tiếp tục với Google để mở không gian.');
   } catch(error) { notice(error.message,true); }
 });
 $('disconnect').addEventListener('click', () => { disconnect(); notice('Đã kết thúc phiên trên trang này. Muốn thu hồi quyền đã cấp, mở mục Kết nối bên thứ ba trong tài khoản Google.'); });
@@ -202,7 +231,7 @@ $('list-calendars').addEventListener('click', async () => {
   finally { button.disabled = !connected(); button.textContent = 'Lấy danh sách lịch của tôi'; }
 });
 
-$('connect').addEventListener('click', () => {
+function signIn() {
   if (!sdkReady) return;
   if (!validClientId(settings.clientId)) { notice('Mở Cấu hình ứng dụng Google và nhập Client ID của website này.',true); return; }
   disconnect(); notice('');
@@ -215,7 +244,7 @@ $('connect').addEventListener('click', () => {
       if (!google.accounts.oauth2.hasGrantedAllScopes(response,...SCOPES)) { notice('Bạn chưa cấp đủ quyền đọc Sheets và Calendar. Bấm Kết nối Google để chọn lại quyền.',true); refreshAuth(); return; }
       token = response.access_token; expires = Date.now() + Math.max(0,Number(response.expires_in || 3600)-30)*1000;
       expiryTimer = setTimeout(() => { disconnect(); notice('Phiên Google đã hết hạn. Bấm Kết nối Google để tiếp tục.',true); },Math.max(0,expires-Date.now()));
-      refreshAuth(); notice('Đã kết nối Google. Thêm nguồn hoặc bấm Kiểm tra bên cạnh nguồn đã lưu.');
+      refreshAuth();enterWorkspace();
     },
     error_callback: error => {
       if (session !== generation) return;
@@ -223,14 +252,18 @@ $('connect').addEventListener('click', () => {
     },
   });
   $('auth-status').textContent = 'Hoàn tất đăng nhập trong cửa sổ Google';
+  $('welcome-status').textContent = 'Hoàn tất đăng nhập trong cửa sổ Google';
   client.requestAccessToken({prompt:'select_account'});
-});
+}
+$('connect').addEventListener('click',signIn);
+$('welcome-connect').addEventListener('click',signIn);
 
 renderSources();
+refreshAuth();
 const script = document.createElement('script');
 script.src = 'https://accounts.google.com/gsi/client'; script.async = true;
 const sdkTimeout = setTimeout(() => { if (!sdkReady) { refreshAuth(); notice('Chưa tải được dịch vụ đăng nhập Google. Kiểm tra mạng rồi tải lại trang.',true); } },15000);
 script.onload = () => { clearTimeout(sdkTimeout); sdkReady = Boolean(window.google?.accounts?.oauth2); refreshAuth(); };
 script.onerror = () => { clearTimeout(sdkTimeout); refreshAuth(); notice('Không tải được dịch vụ đăng nhập Google. Kiểm tra mạng hoặc trình chặn nội dung rồi tải lại trang.',true); };
 document.head.append(script);
-if (!settings.clientId) { $('client-id').closest('details').open = true; notice('Bản sao website này cần Client ID riêng. Nhập mã trong Cấu hình ứng dụng Google.',true); }
+if (!settings.clientId) { $('client-id').closest('details').open = true; showSettings(); notice('Bản sao website này cần Client ID riêng. Nhập mã trong Cấu hình ứng dụng Google.',true); }

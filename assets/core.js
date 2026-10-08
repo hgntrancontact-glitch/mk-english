@@ -29,6 +29,18 @@ export function validClientId(value) {
   return /^\d+-[a-zA-Z0-9_-]+\.apps\.googleusercontent\.com$/.test(value);
 }
 
+// Setup links carry source IDs in a URL fragment, which is not sent to the web host.
+// Credentials, tokens and private data are never accepted by this importer.
+export function importSetup(value,current) {
+  if(value.length>8192)throw new Error('Cấu hình nguồn quá dài.');
+  const data=JSON.parse(value);
+  if(!Array.isArray(data.sheets)||!Array.isArray(data.calendars))throw new Error('Cấu hình nguồn không hợp lệ.');
+  return {...current,
+    sheets:[...new Set([...data.sheets.map(sheetId),...current.sheets])],
+    calendars:[...new Set([...data.calendars.map(calendarId),...current.calendars])],
+  };
+}
+
 export function readSettings(storage, key, defaultClientId) {
   try {
     const raw = JSON.parse(storage.getItem(key) || '{}');

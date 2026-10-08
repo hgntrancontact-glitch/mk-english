@@ -5,27 +5,35 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <meta name="color-scheme" content="light">
-  <title>Kết nối dữ liệu · MK English</title>
+  <title>MK English · Quản lý lớp học</title>
   <link rel="stylesheet" href="./assets/app.css">
+  <link rel="stylesheet" href="./assets/workspace.css">
   <script type="module" src="./assets/app.js"></script>
 </head>
 <body>
+  <div id="notice" class="notice floating-notice" role="status" hidden></div>
+  <section id="welcome" class="welcome">
+    <div class="welcome-story"><a class="brand" href="./"><span class="monogram">MK</span><span>MK English<small>Không gian quản lý lớp học</small></span></a><div><p class="eyebrow">DÀNH CHO LỚP HỌC CỦA BẠN</p><h1>Mọi lớp học.<br>Một không gian.</h1><p>Lớp học, học sinh và lịch giảng dạy.<br>Gọn gàng để bạn tập trung vào việc dạy.</p></div><span class="welcome-foot">Google Sheets & Google Calendar</span></div>
+    <div class="welcome-content"><div class="welcome-form"><span class="welcome-mark" aria-hidden="true">↗</span><p class="eyebrow">CHÀO MỪNG TRỞ LẠI</p><h2>Mở không gian của bạn</h2><p id="welcome-description">Đăng nhập bằng tài khoản Google quản lý lớp học để bắt đầu.</p><button id="welcome-connect" class="primary google-button" disabled><span class="google-g" aria-hidden="true">G</span> Tiếp tục với Google</button><p id="welcome-status" class="help" aria-live="polite">Đang chuẩn bị đăng nhập…</p><button id="welcome-settings" class="text-button">Cài đặt nguồn dữ liệu</button><p class="welcome-privacy">Dữ liệu được truy cập theo quyền tài khoản Google của bạn.</p></div></div>
+  </section>
+  <div id="app-shell" hidden>
   <aside class="sidebar">
     <a class="brand" href="./"><span class="monogram">MK</span><span>MK English<small>Quản lý lớp học</small></span></a>
     <div class="nav-label">KHÔNG GIAN LÀM VIỆC</div>
-    <a class="nav-link active" href="#connections" aria-current="page"><span aria-hidden="true">⚙</span> Cài đặt kết nối</a>
-    <a class="nav-link" href="./THIET_LAP.md" target="_blank" rel="noopener"><span aria-hidden="true">↗</span> Hướng dẫn thiết lập</a>
-    <div class="sidebar-note"><strong>Bản kiểm tra kết nối</strong><p>Kết nối tài khoản và kiểm tra nguồn dữ liệu trước khi sử dụng các chức năng quản lý.</p></div>
+    <nav id="main-nav" aria-label="Chức năng"></nav>
+    <button id="settings-nav" class="nav-link"><span aria-hidden="true">⚙</span> Cài đặt</button>
+    <div class="sidebar-note"><strong>Dữ liệu từ Google</strong><p>Bản xem dữ liệu. Các chức năng nhập và sửa đang được phát triển.</p><button id="sidebar-signout" class="text-button">Đăng xuất</button></div>
   </aside>
   <div class="workspace">
-    <header class="topbar"><span>Không gian của bạn <span class="slash">/</span> Cài đặt</span><span id="auth-badge" class="badge">Chưa kết nối</span></header>
-    <main id="connections">
-      <div class="page-heading"><div><p class="eyebrow">THIẾT LẬP BAN ĐẦU</p><h1>Kết nối dữ liệu</h1><p class="lead">Sử dụng Google Sheets và Calendar của bạn trong một không gian.</p></div><span class="version">Bản kết nối · 0.1</span></div>
-      <div id="notice" class="notice" role="status" hidden></div>
+    <header class="topbar"><span>Không gian của bạn <span class="slash">/</span> <span id="breadcrumb">Lớp học</span></span><span id="auth-badge" class="badge">Chưa kết nối</span></header>
+    <main>
+      <section id="data-screen" hidden><div class="page-heading"><div><p class="eyebrow">QUẢN LÝ</p><h1 id="view-title">Lớp học</h1><p id="view-subtitle" class="lead"></p></div><button id="refresh-data" data-auth>Tải lại</button></div><div id="view-controls" class="view-controls"></div><div id="data-content" class="card data-card" aria-live="polite"></div></section>
+      <section id="connections" hidden>
+      <div class="page-heading"><div><p class="eyebrow">KHÔNG GIAN LÀM VIỆC</p><h1>Cài đặt</h1><p class="lead">Thay đổi tài khoản và nguồn dữ liệu khi cần.</p></div><button id="back-workspace">Về lớp học</button></div>
       <section class="card account-card" aria-labelledby="account-title">
         <div class="section-heading"><span class="step">01</span><div><h2 id="account-title">Tài khoản Google</h2><p>Đăng nhập bằng tài khoản có quyền truy cập Sheet và lịch của bạn.</p></div></div>
         <div class="account-actions"><button id="connect" class="primary" disabled>Kết nối Google</button><button id="disconnect" hidden>Ngắt kết nối</button><span id="auth-status" class="muted">Đang chuẩn bị đăng nhập…</span></div>
-        <p class="help">Bản này chỉ yêu cầu quyền đọc để kiểm tra kết nối. Khi đóng hoặc tải lại trang, bạn cần kết nối lại; cấu hình đã lưu vẫn được giữ.</p>
+        <p class="help">Nguồn dữ liệu được ghi nhớ trên trình duyệt. Khi Google yêu cầu đăng nhập lại, bạn không cần nhập lại link.</p>
         <details class="advanced"><summary>Cấu hình ứng dụng Google</summary><label for="client-id">Google Client ID</label><input id="client-id" type="text" spellcheck="false" autocomplete="off"><p class="help">Bản sao của khách hàng dùng Client ID của khách. Không nhập Client secret.</p><button id="save-client">Lưu Client ID</button></details>
       </section>
       <div class="sources-grid">
@@ -46,8 +54,9 @@
           <div id="calendar-preview" class="preview" aria-live="polite"></div>
         </section>
       </div>
-      <footer>Dữ liệu được đọc trực tiếp từ Google sau khi bạn cấp quyền. Bản kiểm tra này chưa có chức năng ghi dữ liệu hoặc quản lý lớp học.</footer>
+      </section>
     </main>
+  </div>
   </div>
   <noscript>Bạn cần bật JavaScript để kết nối Google.</noscript>
 </body>
