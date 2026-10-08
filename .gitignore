@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+.DS_Store
+.local_auth/
+reference/
+credentials*.json
+client_secret*.json
+service-account*.json
+*.pem
+*.key
+playwright-report/
+test-results/
