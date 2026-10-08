@@ -2,7 +2,7 @@
 
 ## GitHub Pages
 
-Trong repository, mở Settings → Pages. Ở Build and deployment → Source, chọn Deploy from a branch → main → /(root), rồi Save. Đây là cách phát hành dự kiến cho bộ website tĩnh. Khi có mã website sẵn sàng, đẩy mã lên main sẽ cập nhật Pages. Hiện repository mới có tài liệu; chọn nguồn này chưa có nghĩa ứng dụng đã chạy.
+Trong repository, mở Settings → Pages. Ở Build and deployment → Source, chọn Deploy from a branch → main → /(root), rồi Save. Website tĩnh nằm ngay ở gốc repository, không cần build. Đẩy mã lên main sẽ cập nhật Pages khi nguồn xuất bản này đã được bật.
 
 Không cần GitHub Pro cho repository Public.
 
@@ -16,15 +16,33 @@ Mỗi người mua sở hữu Sheet, Calendar, repository và website riêng. Ph
 4. Google Auth Platform → Branding → Get started (nếu chưa cấu hình): app name MK English, support/contact email của chủ ứng dụng; Audience External nếu dùng Gmail cá nhân.
 5. Audience → Test users → Add users: thêm email sẽ dùng thử. Giữ Testing trong giai đoạn kiểm thử; việc phát hành cho người mua cần hướng dẫn cấu hình và xét duyệt riêng khi phù hợp.
 6. Data Access → Add or remove scopes: khai báo các phạm vi ứng dụng sử dụng:
-   - https://www.googleapis.com/auth/spreadsheets
-   - https://www.googleapis.com/auth/calendar.events
+   - https://www.googleapis.com/auth/spreadsheets.readonly
+   - https://www.googleapis.com/auth/calendar.events.readonly
    - https://www.googleapis.com/auth/calendar.calendarlist.readonly
 7. Clients → Create client → Web application; tên MK English Web.
 8. Authorized JavaScript origins: thêm https://hgntrancontact-glitch.github.io và http://localhost:5173. Không thêm /mk-english vào origin. Bản sao của người mua dùng domain của chính họ.
 9. Với luồng token phía trình duyệt dự kiến, để trống Authorized redirect URIs. Nếu kiến trúc xác thực sau này thay đổi, phải cập nhật theo triển khai thực tế.
 10. Create; lưu Client ID (đuôi apps.googleusercontent.com) để cấu hình ứng dụng. Client ID là mã định danh công khai; không gửi hoặc commit Client Secret, token, khóa service account.
 
-Đây là phần chuẩn bị quyền. Chưa có ứng dụng triển khai để thử đăng nhập. Khi ứng dụng sẵn sàng, người dùng đăng nhập Google và cấp quyền cho tài nguyên họ được phép truy cập. Kết nối Drive trong chat không tự cấp quyền cho website.
+Đây là các quyền đọc dành cho bản kiểm tra kết nối 0.1. Chức năng ghi dữ liệu sẽ cần cấp quyền bổ sung khi được triển khai. Kết nối Drive trong chat không tự cấp quyền cho website.
+
+## Kiểm tra trên website
+
+1. Mở website Pages, bấm Kết nối Google rồi chọn tài khoản trong danh sách Test users.
+2. Dán link Sheet vào ô Google Sheets, bấm Lưu nguồn rồi Kiểm tra. Trang sẽ hiển thị tên file và tiêu đề các bảng đọc được.
+3. Bấm Lấy danh sách lịch của tôi, chọn lịch rồi bấm Kiểm tra cạnh nguồn lịch. Trang hiển thị tối đa 30 sự kiện trong 7 ngày tới.
+4. Có thể thêm nhiều nguồn. Bỏ nguồn chỉ bỏ cấu hình trên trình duyệt, không xoá file hoặc lịch Google.
+5. Khi đóng hoặc tải lại trang, bấm Kết nối Google lại. Token không được lưu lâu dài; link/ID đã nhập vẫn có trong cấu hình.
+
+Người mua có địa chỉ Pages khác phải mở Cấu hình ứng dụng Google trên website và nhập Client ID của chính mình; trang không tự dùng Client ID MK trên tên miền khác. Không tải Client secret lên GitHub.
+
+## Khi không kết nối được
+
+- Google báo tài khoản chưa được phép: kiểm tra Audience → Test users, thêm đúng email đang chọn.
+- Google báo origin không hợp lệ: kiểm tra Authorized JavaScript origins là https://TÊN-TÀI-KHOẢN.github.io, không có đường dẫn repository.
+- Trang báo API chưa bật: bật Google Sheets API và Google Calendar API trong đúng dự án chứa Client ID.
+- Đọc file/lịch bị từ chối: mở trực tiếp nguồn đó bằng cùng tài khoản để kiểm tra quyền.
+- Cấu hình Google mới thay đổi có thể cần thời gian có hiệu lực, theo thông báo của Google.
 
 ## Tài liệu chính thức
 
