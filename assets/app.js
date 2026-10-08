@@ -1,6 +1,6 @@
-import {DEFAULT_CLIENT_ID, DEFAULT_ORIGIN, SCOPES, EXPECTED_TABS} from './config.js';
-import {sheetId, calendarId, validClientId, readSettings, apiError, calendarWindow, importSetup} from './core.js';
-import {createWorkspace} from './workspace.js';
+import {DEFAULT_CLIENT_ID, DEFAULT_ORIGIN, SCOPES, EXPECTED_TABS} from './config.js?v=0.2.1';
+import {sheetId, calendarId, validClientId, readSettings, apiError, calendarWindow, importSetup} from './core.js?v=0.2.1';
+import {createWorkspace} from './workspace.js?v=0.2.1';
 
 const $ = id => document.getElementById(id);
 const storageKey = `mk-english:${location.pathname}:connections:v1`;

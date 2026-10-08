@@ -1,5 +1,5 @@
-import {EXPECTED_TABS} from './config.js';
-import {calendarWindow} from './core.js';
+import {EXPECTED_TABS} from './config.js?v=0.2.1';
+import {calendarWindow} from './core.js?v=0.2.1';
 
 const $ = id => document.getElementById(id);
 function node(tag,text,className) { const e=document.createElement(tag); if(text!==undefined)e.textContent=text; if(className)e.className=className; return e; }
