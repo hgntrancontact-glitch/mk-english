@@ -1,7 +1,7 @@
-import {DEFAULT_CLIENT_ID,DEFAULT_ORIGIN,SCOPES} from './config.js?v=0.3.0';
-import {validClientId,readSettings,apiError,importSetup} from './core.js?v=0.3.0';
-import {$} from './dom.js?v=0.3.0';
-import {recordTiming} from './timing.js?v=0.3.0';
+import {DEFAULT_CLIENT_ID,DEFAULT_ORIGIN,SCOPES} from './config.js?v=0.3.1';
+import {validClientId,readSettings,apiError,importSetup} from './core.js?v=0.3.1';
+import {$} from './dom.js?v=0.3.1';
+import {recordTiming} from './timing.js?v=0.3.1';
 
 const storageKey = `mk-english:${location.pathname}:connections:v1`;
 const ownOrigin = location.origin === DEFAULT_ORIGIN || ['localhost','127.0.0.1'].includes(location.hostname);
@@ -12,11 +12,11 @@ const activeReads = new Set();
 let workspace, workspacePromise, settingsModule, settingsPromise;
 let screenEpoch=0;
 function loadWorkspace(){
-  if(!workspacePromise) workspacePromise=import('./workspace.js?v=0.3.0').then(({createWorkspace})=>{workspace=createWorkspace({getGoogle,getSettings:()=>settings,onSettings:showSettings,onError:message=>notice(message,true)});return workspace;}).catch(error=>{workspacePromise=null;throw error;});
+  if(!workspacePromise) workspacePromise=import('./workspace.js?v=0.3.1').then(({createWorkspace})=>{workspace=createWorkspace({getGoogle,getSettings:()=>settings,onSettings:showSettings,onError:message=>notice(message,true)});return workspace;}).catch(error=>{workspacePromise=null;throw error;});
   return workspacePromise;
 }
 function loadSettings(){
-  if(!settingsPromise) settingsPromise=import('./settings.js?v=0.3.0').then(({initSettings})=>{settingsModule=initSettings({getSettings:()=>settings,persist,connected,getGeneration:()=>generation,getGoogle,notice});return settingsModule;}).catch(error=>{settingsPromise=null;throw error;});
+  if(!settingsPromise) settingsPromise=import('./settings.js?v=0.3.1').then(({initSettings})=>{settingsModule=initSettings({getSettings:()=>settings,persist,connected,getGeneration:()=>generation,getGoogle,notice});return settingsModule;}).catch(error=>{settingsPromise=null;throw error;});
   return settingsPromise;
 }
 
@@ -98,7 +98,7 @@ async function getGoogle(url) {
     if (generation !== current) throw new Error('Phiên kết nối đã thay đổi.');
     if (!response.ok) {
       if (response.status === 401) { disconnect(); notice(apiError(401,data),true); }
-      throw new Error(apiError(response.status, data));
+      const error=new Error(apiError(response.status,data));error.status=response.status;throw error;
     }
     return data;
   } catch (error) {

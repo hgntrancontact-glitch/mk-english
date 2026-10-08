@@ -1,5 +1,5 @@
-import {el} from './dom.js?v=0.3.0';
-import {recordTiming} from './timing.js?v=0.3.0';
+import {el} from './dom.js?v=0.3.1';
+import {recordTiming} from './timing.js?v=0.3.1';
 
 const PAGE_SIZE=50;
 export function createView(data) {
@@ -40,7 +40,7 @@ export function createView(data) {
     if(workerReady)return workerReady;
     workerReady=new Promise(resolve=>{
       try {
-        worker=new Worker(new URL('./search-worker.js?v=0.3.0',import.meta.url));
+        worker=new Worker(new URL('./search-worker.js?v=0.3.1',import.meta.url));
         worker.onmessage=event=>{
           if(event.data.type==='ready')resolve(true);
           else if(event.data.type==='result'){requests.get(event.data.id)?.(event.data.matches);requests.delete(event.data.id);}

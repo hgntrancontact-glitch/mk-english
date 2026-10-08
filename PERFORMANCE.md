@@ -1,3 +1,17 @@
+# Chuyển mục trong bản 0.3.1
+
+Bản 0.3.0 vẫn gửi một yêu cầu Google riêng khi mở lần đầu mỗi bảng. Tách JavaScript không loại bỏ thời gian chờ này.
+
+Bản 0.3.1 đọc 8 bảng của nguồn được chọn trong một [yêu cầu Sheets batchGet](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets.values/batchGet), dùng thứ tự trả về được API bảo đảm để ghép đúng bảng. Lịch mặc định được chuẩn bị song song. Mã và DOM của bảng vẫn tải/dựng khi cần. Dữ liệu nguồn giữ trong RAM tới khi đăng xuất hoặc đổi cấu hình, tách riêng từng nguồn; tối đa 12 màn hình giữ DOM và bộ lọc. Nút Tải lại đọc mới riêng mục hiện tại.
+
+Kiểm thử Chrome cục bộ: cố ý trì hoãn Sheets 1.000 ms, chuyển mục trong lúc lần tải đầu đang chạy, rồi mở đủ 8 bảng. Sau lần tải chung, không có thêm yêu cầu Google khi chuyển giữa 8 bảng. Trong lượt thử với bảng nhỏ 2 dòng × 6 cột, các lần chuyển đo trong trang gồm khung hình kế tiếp mất 3–30 ms. Đây là kiểm tra luồng chờ mạng với dữ liệu giả, không phải tốc độ Google thật hay cam kết cho bảng lớn.
+
+12 unit tests và 17 nhóm browser mock đạt, không có lỗi JavaScript. Có kiểm tra tách nguồn, tải lại không bị bản dữ liệu cũ ghi đè, phản hồi đến sau đăng xuất, thiếu tab, lỗi quyền và thử lại sau lỗi mạng. Calendar chuẩn bị sớm bị lỗi không ngăn các bảng mở; khi chọn Lịch, ứng dụng thử tải lại.
+
+Giới hạn: lần vào ứng dụng vẫn cần chờ Google; tải chung chuyển chi phí đọc các bảng về đầu phiên và có thể lâu hơn với nguồn lớn. Đổi sang nguồn chưa tải cũng cần mạng. Chưa đo phiên Google thật của chủ tài khoản. Thay đổi trực tiếp trong Google cần bấm Tải lại ở mục tương ứng; chưa có đồng bộ đẩy tức thời.
+
+---
+
 # Đo hiệu năng 0.2.1 và 0.3.0
 
 Đo cục bộ ngày 08/10/2026 bằng Chrome headless, giả lập CPU chậm hơn 4 lần, dữ liệu 10.000 dòng × 35 cột. Google OAuth và API được mô phỏng. Không dùng dữ liệu học sinh thật.

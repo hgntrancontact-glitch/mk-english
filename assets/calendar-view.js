@@ -1,4 +1,4 @@
-import {el} from './dom.js?v=0.3.0';
+import {el} from './dom.js?v=0.3.1';
 export function createView(data) {
   const root=el('div',undefined,'schedule-list'),controls=el('div',undefined,'table-controls'),input=el('input');
   input.type='search';input.placeholder='Tìm trong lịch…';input.setAttribute('aria-label','Tìm kiếm');controls.append(input);

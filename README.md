@@ -5,7 +5,7 @@
 
 Đã có màn hình chào và **Tiếp tục với Google**, tự mở Lớp học sau khi đăng nhập với nguồn đã lưu. Sidebar xem 8 bảng và lịch trong 7 ngày tới, tìm kiếm cục bộ, phân trang bảng 50 dòng và bộ nhớ đệm trong phiên. Cài đặt riêng cho việc đổi/thêm nguồn Sheets và Calendar. Không cần GAS cho phần đọc dữ liệu.
 
-Đây là bản xem dữ liệu 0.3, **chưa phải ứng dụng quản lý hoàn chỉnh**. Có xem các bảng Điểm danh/Học phí/Chăm sóc; chưa có thao tác ghi, tạo điểm danh, thu phí, chăm sóc, báo cáo hoặc menu Sheets mới. Calendar hiện là danh sách 7 ngày, tối đa 250 sự kiện; chưa có lưới lịch chỉnh sửa. Đã kiểm thử cục bộ với OAuth/API giả lập; chưa xác nhận đăng nhập thật của chủ tài khoản.
+Đây là bản xem dữ liệu 0.3.1, **chưa phải ứng dụng quản lý hoàn chỉnh**. Có xem các bảng Điểm danh/Học phí/Chăm sóc; chưa có thao tác ghi, tạo điểm danh, thu phí, chăm sóc, báo cáo hoặc menu Sheets mới. Calendar hiện là danh sách 7 ngày, tối đa 250 sự kiện; chưa có lưới lịch chỉnh sửa. Đã kiểm thử cục bộ với OAuth/API giả lập; chưa xác nhận đăng nhập thật của chủ tài khoản.
 
 ## Mở và thử kết nối
 
@@ -20,7 +20,7 @@ Website chỉ yêu cầu quyền đọc trong bản này. Token chỉ ở bộ n
 
 ## Kiểm thử
 
-`npm test` chạy 6 kiểm thử bộ xử lý link, cấu hình, lỗi API và khoảng lịch. Không cần cài dependency. Kiểm thử trình duyệt cục bộ bổ sung đã chạy 15 nhóm với Google giả lập, gồm mở dữ liệu tự động, bộ nhớ đệm, hết phiên và phản hồi đến sau đăng xuất; các kết quả này không đo độ trễ Google thật.
+`npm test` chạy 12 kiểm thử bộ xử lý link, cấu hình, lỗi API, khoảng lịch và bộ nhớ dữ liệu trong phiên. Không cần cài dependency. Kiểm thử trình duyệt cục bộ bổ sung đã chạy 17 nhóm với Google giả lập, gồm mở dữ liệu tự động, bộ nhớ đệm, hết phiên và phản hồi đến sau đăng xuất; các kết quả này không đo độ trễ Google thật.
 
 ## Hướng triển khai
 
@@ -29,10 +29,11 @@ Website chỉ yêu cầu quyền đọc trong bản này. Token chỉ ở bộ n
 - Cấu hình file/lịch trong ứng dụng; không đưa dữ liệu học sinh, token hoặc khóa bí mật vào repository.
 - Đọc [hướng dẫn thiết lập](THIET_LAP.md) trước khi kết nối.
 
-## Hiệu năng 0.3
+## Hiệu năng 0.3.1
 
 - Cài đặt, bảng và lịch chỉ tải mã khi cần.
-- Giữ tối đa 6 màn hình đã mở trong phiên; khi quay lại giữ bộ lọc, trang hiện tại và vị trí cuộn. Không tải lại dữ liệu nếu người dùng chưa bấm Tải lại.
+- Đọc chung 8 bảng của nguồn đang chọn bằng một yêu cầu Sheets khi vào ứng dụng; chuẩn bị lịch mặc định song song. Chuyển mục dùng dữ liệu trong phiên, kể cả mục chưa từng mở. Nguồn khác tải khi bạn chọn nguồn đó.
+- Giữ tối đa 12 màn hình đã mở trong phiên; khi quay lại giữ bộ lọc, trang hiện tại và vị trí cuộn. Dữ liệu bảng vẫn được giữ trong phiên khi một màn hình bị loại khỏi bộ nhớ giao diện. Tải lại lấy dữ liệu mới riêng cho mục đang mở; đăng xuất xoá bộ nhớ dữ liệu. Nếu nguồn thiếu hoặc đổi tên tab, ứng dụng thử đọc từng bảng còn hợp lệ.
 - Bảng lớn tạo chỉ mục tìm kiếm trong Web Worker; bảng nhỏ lập chỉ mục một lần. Chỉ cập nhật phần thân bảng, giữ nguyên tiêu đề.
 - Trong Cài đặt → Thông tin độ trễ → Xem số liệu có thời gian chờ Google và xử lý giao diện, không có nội dung dữ liệu hay ID nguồn.
 - Xem [kết quả đo cục bộ](PERFORMANCE.md). Chưa có số đo Google thật trong tài khoản chủ sở hữu.

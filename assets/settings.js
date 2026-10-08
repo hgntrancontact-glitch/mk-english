@@ -1,7 +1,7 @@
-import {EXPECTED_TABS} from './config.js?v=0.3.0';
-import {sheetId,calendarId,calendarWindow} from './core.js?v=0.3.0';
-import {$,el} from './dom.js?v=0.3.0';
-import {timingReport} from './timing.js?v=0.3.0';
+import {EXPECTED_TABS} from './config.js?v=0.3.1';
+import {sheetId,calendarId,calendarWindow} from './core.js?v=0.3.1';
+import {$,el} from './dom.js?v=0.3.1';
+import {timingReport} from './timing.js?v=0.3.1';
 
 export function initSettings({getSettings,persist,connected,getGeneration,getGoogle,notice}) {
 const revisions={sheet:0,calendar:0,list:0};

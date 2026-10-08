@@ -1,37 +1,37 @@
-import {EXPECTED_TABS} from './config.js?v=0.3.0';
-import {calendarWindow} from './core.js?v=0.3.0';
-import {$,el} from './dom.js?v=0.3.0';
-import {recordTiming} from './timing.js?v=0.3.0';
+import {EXPECTED_TABS} from './config.js?v=0.3.1';
+import {createDataStore} from './data-store.js?v=0.3.1';
+import {$,el} from './dom.js?v=0.3.1';
+import {recordTiming} from './timing.js?v=0.3.1';
 
-const MAX_VIEWS=6;
+const MAX_VIEWS=12;
 export function createWorkspace({getGoogle,getSettings,onSettings,onError}) {
-  const views=new Map(),pending=new Map(),selectedSources=new Map();
+  const views=new Map(),pending=new Map(),selectedSources=new Map(),store=createDataStore(getGoogle);
+  let warming=false;
   let page='Lớp học',revision=0,epoch=0,activeView;
   const nav=$('main-nav');
   for(const name of ['Lớp học','Học sinh','Thời khoá biểu',...EXPECTED_TABS.slice(2)]) {
     const button=el('button',name,'nav-link');button.dataset.route=name;button.onclick=()=>open(name);nav.append(button);
   }
   $('refresh-data').onclick=()=>open(page,true);
-  function disposeViews(){for(const view of views.values())view.destroy();views.clear();pending.clear();activeView=null;}
+  function disposeViews(){for(const view of views.values())view.destroy();views.clear();pending.clear();activeView=null;store.clear();warming=false;}
   function clear(){epoch++;revision++;disposeViews();$('data-content').replaceChildren();$('view-controls').replaceChildren();selectedSources.clear();}
   function remember(key,view) {
     views.delete(key);views.set(key,view);
     while(views.size>MAX_VIEWS){const oldest=views.keys().next().value;if(views.get(oldest)===activeView){const v=views.get(oldest);views.delete(oldest);views.set(oldest,v);continue;}views.get(oldest).destroy();views.delete(oldest);}
   }
   function sourceList(name){const s=getSettings();return name==='Thời khoá biểu'?s.calendars:s.sheets;}
-  function resource(name,source) {
-    if(name==='Thời khoá biểu') {
-      const params=new URLSearchParams({...calendarWindow(),singleEvents:'true',orderBy:'startTime',maxResults:'250',fields:'summary,timeZone,items(summary,start,end),nextPageToken'});
-      return {url:`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(source)}/events?${params}`,module:import('./calendar-view.js?v=0.3.0')};
-    }
-    const range=`'${name.replaceAll("'","''")}'`;
-    return {url:`https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(source)}/values/${encodeURIComponent(range)}?valueRenderOption=FORMATTED_VALUE`,module:import('./table.js?v=0.3.0')};
+  function warmCalendar() {
+    if(warming)return;warming=true;
+    const source=getSettings().calendars[0];
+    if(source)load('Thời khoá biểu',source,JSON.stringify(['Thời khoá biểu',source]),false).catch(()=>{});
   }
   function load(name,source,key,refresh) {
     if(pending.has(key))return pending.get(key);
     if(!refresh&&views.has(key))return Promise.resolve(views.get(key));
-    const session=epoch,{url,module}=resource(name,source);
-    const task=Promise.all([getGoogle(url),module]).then(([data,{createView}])=>{
+    const session=epoch,isCalendar=name==='Thời khoá biểu';
+    const module=isCalendar?import('./calendar-view.js?v=0.3.1'):import('./table.js?v=0.3.1');
+    const data=isCalendar?store.calendar(source,refresh):store.table(source,name,refresh);
+    const task=Promise.all([data,module]).then(([data,{createView}])=>{
       if(session!==epoch)return null;
       const start=performance.now(),view=createView(data);
       recordTiming('view-create',performance.now()-start,{type:name==='Thời khoá biểu'?'calendar':'table'});
@@ -56,9 +56,10 @@ export function createWorkspace({getGoogle,getSettings,onSettings,onError}) {
     $('breadcrumb').textContent=name;$('view-title').textContent=name;
     const key=JSON.stringify([name,source]);
     if(!source){activeView?.deactivate?.();const box=el('div',undefined,'empty-state');box.append(el('h2','Chọn nguồn dữ liệu cho không gian này'),el('p','Thêm nguồn một lần trong Cài đặt để tự mở ở các lần sau.'));const button=el('button','Mở Cài đặt','primary');button.onclick=onSettings;box.append(button);$('view-controls').replaceChildren();$('data-content').replaceChildren(box);$('view-subtitle').textContent='';$('refresh-data').disabled=false;return;}
+    warmCalendar();
     if(!refresh&&views.has(key)){const view=views.get(key);remember(key,view);mount(view,ids,source);$('refresh-data').disabled=false;$('refresh-data').textContent='Tải lại';recordTiming('view-cache',performance.now()-started);return;}
     $('refresh-data').disabled=true;$('refresh-data').textContent=refresh?'Đang cập nhật…':'Đang mở…';
-    if(!refresh){activeView?.deactivate?.();$('view-controls').replaceChildren();$('data-content').replaceChildren(el('div','Đang mở dữ liệu…','empty-state'));$('view-subtitle').textContent='';}
+    if(!refresh){activeView?.deactivate?.();$('view-controls').replaceChildren();$('data-content').replaceChildren(el('div',name==='Thời khoá biểu'?'Đang lấy lịch từ Google…':'Đang lấy bộ dữ liệu từ Google. Các bảng sẽ sẵn sàng sau lần tải này.','empty-state'));$('view-subtitle').textContent='';}
     try {
       const view=await load(name,source,key,refresh);
       if(current!==revision||!view)return;
