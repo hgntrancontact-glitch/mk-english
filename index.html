@@ -6,28 +6,28 @@
   <meta name="referrer" content="no-referrer">
   <meta name="color-scheme" content="light">
   <title>MK English · Quản lý lớp học</title>
-  <link rel="stylesheet" href="./assets/app.css?v=0.3.1">
-  <link rel="stylesheet" href="./assets/workspace.css?v=0.3.1">
-  <script type="module" src="./assets/app.js?v=0.3.1"></script>
+  <link rel="stylesheet" href="./assets/app.css?v=0.4.0">
+  <link rel="stylesheet" href="./assets/workspace.css?v=0.4.0">
+  <script type="module" src="./assets/app.js?v=0.4.0"></script>
 </head>
 <body>
   <div id="notice" class="notice floating-notice" role="status" hidden></div>
   <section id="welcome" class="welcome">
-    <div class="welcome-story"><a class="brand" href="./"><span class="monogram">MK</span><span>MK English<small>Không gian quản lý lớp học</small></span></a><div><p class="eyebrow">DÀNH CHO LỚP HỌC CỦA BẠN</p><h1>Mọi lớp học.<br>Một không gian.</h1><p>Lớp học, học sinh và lịch giảng dạy.<br>Gọn gàng để bạn tập trung vào việc dạy.</p></div><span class="welcome-foot">Google Sheets & Google Calendar</span></div>
-    <div class="welcome-content"><div class="welcome-form"><span class="welcome-mark" aria-hidden="true">↗</span><p class="eyebrow">CHÀO MỪNG TRỞ LẠI</p><h2>Mở không gian của bạn</h2><p id="welcome-description">Đăng nhập bằng tài khoản Google quản lý lớp học để bắt đầu.</p><button id="welcome-connect" class="primary google-button" disabled><span class="google-g" aria-hidden="true">G</span> Tiếp tục với Google</button><p id="welcome-status" class="help" aria-live="polite">Đang chuẩn bị đăng nhập…</p><button id="welcome-settings" class="text-button">Cài đặt nguồn dữ liệu</button><p class="welcome-privacy">Dữ liệu được truy cập theo quyền tài khoản Google của bạn.</p></div></div>
+    <div class="welcome-story"><a class="brand" href="./"><span>MK English<small>Không gian quản lý lớp học</small></span></a><div><p class="eyebrow">DÀNH CHO LỚP HỌC CỦA BẠN</p><h1>Mọi lớp học.<br>Một không gian.</h1><p>Lớp học, học sinh và lịch giảng dạy.<br>Gọn gàng để bạn tập trung vào việc dạy.</p></div><span class="welcome-foot">Google Sheets & Google Calendar</span></div>
+    <div class="welcome-content"><div class="welcome-form"><p class="eyebrow">CHÀO MỪNG TRỞ LẠI</p><h2>Mở không gian của bạn</h2><p id="welcome-description">Đăng nhập bằng tài khoản Google quản lý lớp học để bắt đầu.</p><button id="welcome-connect" class="primary google-button" disabled>Tiếp tục với Google</button><p id="welcome-status" class="help" aria-live="polite">Đang chuẩn bị đăng nhập…</p><button id="welcome-settings" class="text-button">Cài đặt nguồn dữ liệu</button><p class="welcome-privacy">Dữ liệu được truy cập theo quyền tài khoản Google của bạn.</p></div></div>
   </section>
   <div id="app-shell" hidden>
-  <aside class="sidebar">
-    <a class="brand" href="./"><span class="monogram">MK</span><span>MK English<small>Quản lý lớp học</small></span></a>
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="./"><span>MK English<small>Quản lý lớp học</small></span></a>
     <div class="nav-label">KHÔNG GIAN LÀM VIỆC</div>
     <nav id="main-nav" aria-label="Chức năng"></nav>
-    <button id="settings-nav" class="nav-link"><span aria-hidden="true">⚙</span> Cài đặt</button>
-    <div class="sidebar-note"><strong>Dữ liệu từ Google</strong><p>Bản xem dữ liệu. Các chức năng nhập và sửa đang được phát triển.</p><button id="sidebar-signout" class="text-button">Đăng xuất</button></div>
+    <button id="settings-nav" class="nav-link">Cài đặt</button>
+    <div class="sidebar-note"><strong>Dữ liệu từ Google</strong><p>Lưu thông tin vào Google Sheets và xem lịch giảng dạy tại đây.</p><button id="sidebar-signout" class="text-button">Đăng xuất</button></div>
   </aside>
   <div class="workspace">
-    <header class="topbar"><span>Không gian của bạn <span class="slash">/</span> <span id="breadcrumb">Lớp học</span></span><span id="auth-badge" class="badge">Chưa kết nối</span></header>
+    <header class="topbar"><button id="toggle-menu" aria-controls="sidebar" aria-expanded="true">Đóng menu</button><span class="topbar-path">Không gian của bạn <span class="slash">/</span> <span id="breadcrumb">Lớp học</span></span><span id="auth-badge" class="badge">Chưa kết nối</span></header>
     <main>
-      <section id="data-screen" hidden><div class="page-heading"><div><p class="eyebrow">QUẢN LÝ</p><h1 id="view-title">Lớp học</h1><p id="view-subtitle" class="lead"></p></div><button id="refresh-data" data-auth>Tải lại</button></div><div id="view-controls" class="view-controls"></div><div id="data-content" class="card data-card" aria-live="polite"></div></section>
+      <section id="data-screen" hidden><div class="page-heading"><div><h1 id="view-title">Lớp học</h1><p id="view-subtitle" class="lead"></p></div><div class="heading-actions"><button id="refresh-data" data-auth>Tải lại</button><button id="add-record" class="primary" data-auth>Nhập dữ liệu</button></div></div><div id="view-controls" class="view-controls"></div><div id="data-content" class="card data-card" aria-live="polite"></div></section>
       <section id="connections" hidden>
       <div class="page-heading"><div><p class="eyebrow">KHÔNG GIAN LÀM VIỆC</p><h1>Cài đặt</h1><p class="lead">Thay đổi tài khoản và nguồn dữ liệu khi cần.</p></div><button id="back-workspace">Về lớp học</button></div>
       <section class="card account-card" aria-labelledby="account-title">

@@ -1,3 +1,15 @@
+# Giao diện và nhập liệu 0.4.0
+
+Giữ cách đọc chung 8 bảng của 0.3.1. Bổ sung menu thu gọn, Arial và giao diện trắng/xám. Lịch dùng FullCalendar Standard, tải riêng; dữ liệu lịch tải theo khoảng đang xem, có phân trang API. Biểu mẫu chỉ lấy cấu trúc/ô chọn khi người dùng mở Nhập dữ liệu. Trước lưu, đọc lại các cột, dữ liệu liên kết và dòng trống; việc kiểm tra này có chi phí mạng nhưng không chạy ở mỗi lần chuyển mục.
+
+20 unit tests + 17 nhóm browser kết nối/chuyển mục + 11 nhóm browser nhập liệu/giao diện PASS, không có pageerror. Bao gồm lưu lớp/học sinh rồi đọc lại, cột công thức không cho nhập, học phí và thu chi chung batch, chống bản ghi trùng, lịch ngày/tuần/tháng, thêm và sửa lịch với If-Match, menu đóng/mở và màn hình nhỏ. Tất cả dùng Google giả lập; chưa ghi thử Google thật. Có kiểm tra ảnh desktop, mobile, biểu mẫu và lịch tuần.
+
+Thông tin triển khai API: [Sheets batchUpdate](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/batchUpdate), [Calendar events list](https://developers.google.com/workspace/calendar/api/v3/reference/events/list).
+
+Các số đo 0.3.x bên dưới là kết quả lịch sử, không phải số đo hiệu năng mới cho 0.4.
+
+---
+
 # Chuyển mục trong bản 0.3.1
 
 Bản 0.3.0 vẫn gửi một yêu cầu Google riêng khi mở lần đầu mỗi bảng. Tách JavaScript không loại bỏ thời gian chờ này.

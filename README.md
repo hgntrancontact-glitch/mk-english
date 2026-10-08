@@ -1,39 +1,39 @@
-# mk-english
-Ứng dụng quản lý lớp tiếng Anh
+# MK English
 
-## Trạng thái
+Website quản lý lớp học trên GitHub Pages, kết nối trực tiếp Google Sheets và Google Calendar.
 
-Đã có màn hình chào và **Tiếp tục với Google**, tự mở Lớp học sau khi đăng nhập với nguồn đã lưu. Sidebar xem 8 bảng và lịch trong 7 ngày tới, tìm kiếm cục bộ, phân trang bảng 50 dòng và bộ nhớ đệm trong phiên. Cài đặt riêng cho việc đổi/thêm nguồn Sheets và Calendar. Không cần GAS cho phần đọc dữ liệu.
+## Bản 0.4.0
 
-Đây là bản xem dữ liệu 0.3.1, **chưa phải ứng dụng quản lý hoàn chỉnh**. Có xem các bảng Điểm danh/Học phí/Chăm sóc; chưa có thao tác ghi, tạo điểm danh, thu phí, chăm sóc, báo cáo hoặc menu Sheets mới. Calendar hiện là danh sách 7 ngày, tối đa 250 sự kiện; chưa có lưới lịch chỉnh sửa. Đã kiểm thử cục bộ với OAuth/API giả lập; chưa xác nhận đăng nhập thật của chủ tài khoản.
+- Giao diện trắng/xám, Arial, nút chữ, menu trái có thể đóng/mở.
+- Xem và tìm kiếm 8 bảng. Đọc chung bảng khi vào ứng dụng; chuyển mục dùng dữ liệu trong phiên.
+- Nút **Nhập dữ liệu** mở biểu mẫu theo tiêu đề cột và ô chọn thực tế của Sheet. Các cột công thức được tự giữ/copy sang dòng trống, không yêu cầu người dùng nhập lại.
+- Kiểm tra mã lớp/học sinh liên kết và dữ liệu trùng trước khi ghi. Học phí xác nhận đã nhận tiền: ghi Học phí và Quản lý Thu Chi trong một yêu cầu batch.
+- Thời khoá biểu có lưới **Ngày / Tuần / Tháng**, chuyển khoảng ngày, tìm kiếm, thêm lịch và sửa buổi đang chọn. Sửa lịch dùng ETag để phát hiện thay đổi đồng thời.
+- Nhiều nguồn có thể cấu hình riêng trong Cài đặt. Dữ liệu và token chỉ nằm trong bộ nhớ phiên, không được đưa lên GitHub hay lưu localStorage.
 
-## Mở và thử kết nối
+## Sử dụng
 
-1. Bật Pages: Settings → Pages → Deploy from a branch → main → /(root) → Save.
-2. Mở địa chỉ Pages của repository → Tiếp tục với Google → chọn tài khoản đã thêm vào Test users. Nếu đã lưu nguồn, ứng dụng tự mở dữ liệu; không cần kiểm tra từng nguồn.
-3. Nếu chưa có nguồn, vào Cài đặt → Google Sheets: dán link → Lưu nguồn. Calendar: Lấy danh sách lịch của tôi → chọn lịch.
-4. Bấm Về lớp học. Những lần sau chỉ cần đăng nhập, nguồn đã lưu được dùng tự động. Chọn Tải lại để lấy các chỉnh sửa trực tiếp từ Google.
+1. Mở website → Tiếp tục với Google. Bản này yêu cầu quyền đọc/ghi Sheets và sự kiện Calendar; chọn đầy đủ quyền khi Google hỏi.
+2. Chọn mục bên trái. **Đóng menu / Mở menu** thu gọn hoặc mở lại thanh bên.
+3. Với bảng: bấm **Nhập dữ liệu**, điền các trường bắt buộc, bấm **Lưu vào Google Sheets**. Dữ liệu được tải lại sau khi lưu. Riêng Học phí, lưu nghĩa là đã nhận tiền và đồng thời ghi Thu Chi.
+4. Với lịch: chọn **Ngày, Tuần, Tháng** hoặc **Trước, Sau, Hôm nay**. Bấm **Thêm lịch** hoặc chọn khoảng trống để tạo lịch; bấm buổi có sẵn để chỉnh sửa buổi đó.
+5. Khi sửa trực tiếp trong Google, bấm **Tải lại** ở mục tương ứng để nhận dữ liệu mới.
 
-Bộ bàn giao có thể kèm link khởi động riêng với cấu hình nguồn trong fragment `#setup=`. Ứng dụng lưu cấu hình trên trình duyệt rồi xoá fragment trước khi tải dịch vụ đăng nhập. Không đưa ID nguồn riêng hoặc link khởi động vào repository công khai. Cấu hình này không chứa token và không thay thế quyền Google.
+[Hướng dẫn cấu hình](THIET_LAP.md) · [Hiệu năng và kiểm thử](PERFORMANCE.md)
 
-Website chỉ yêu cầu quyền đọc trong bản này. Token chỉ ở bộ nhớ phiên; tải lại trang cần kết nối lại. Link/ID nguồn được lưu riêng trên trình duyệt; dữ liệu học sinh và nội dung lịch không được lưu lên GitHub.
+## Phạm vi và giới hạn hiện tại
 
-## Kiểm thử
+- Nhập bảng hiện là **thêm bản ghi**; sửa/xoá bản ghi Sheets có sẵn vẫn làm trực tiếp trên Sheet. Chưa có báo cáo tổng hợp, tự đề xuất kỳ chăm sóc/thu phí, tạo điểm danh hàng loạt theo lịch hay menu GAS mới.
+- Biểu mẫu sử dụng các dòng trống trong mẫu để giữ phạm vi công thức hiện có. Khi hết dòng trống, ứng dụng dừng trước khi ghi; cần bổ sung dòng và phạm vi công thức trong Sheet. Không tự đổi cấu trúc cột.
+- Chống bấm lặp, kiểm tra trùng trước lưu, dấu giao dịch/dòng qua developer metadata trong cùng batch. Web Locks giới hạn các lần lưu cùng nguồn trên cùng trình duyệt. Dấu dòng/giao dịch duy nhất giúp các phiên web tránh cùng ghi vào một dòng. Đây không phải khoá toàn bộ Google Sheets: người đang sửa trực tiếp Sheet vẫn có thể thay đổi ô trong khoảng giữa lúc đọc và ghi. Không nên sửa cùng dòng đồng thời ở hai nơi.
+- Calendar hiển thị theo múi giờ thiết bị; sửa lịch lặp áp dụng buổi đang chọn. Chưa chỉnh cả chuỗi, xoá lịch, kéo thả, khách mời hoặc Google Meet. Màu theo màu sự kiện nếu được đặt; màu lịch mặc định dùng xám, chưa lấy cấu hình màu riêng của Calendar.
+- Lần vào đầu, đổi nguồn và tải lại cần chờ Google. Chưa có đồng bộ đẩy tức thời.
+- Đã kiểm thử cục bộ với Google giả lập và kiểm tra hình ảnh. Chưa tự thực hiện ghi thử trên dữ liệu thật của chủ tài khoản.
 
-`npm test` chạy 12 kiểm thử bộ xử lý link, cấu hình, lỗi API, khoảng lịch và bộ nhớ dữ liệu trong phiên. Không cần cài dependency. Kiểm thử trình duyệt cục bộ bổ sung đã chạy 17 nhóm với Google giả lập, gồm mở dữ liệu tự động, bộ nhớ đệm, hết phiên và phản hồi đến sau đăng xuất; các kết quả này không đo độ trễ Google thật.
+## Kiểm thử và thư viện
 
-## Hướng triển khai
+`npm test` chạy 20 bài kiểm thử. Đã chạy thêm 17 nhóm kiểm thử kết nối/chuyển mục và 11 nhóm giao diện/nhập liệu với Google giả lập, không ghi dữ liệu thật.
 
-- GitHub Pages phục vụ giao diện web.
-- Google Sheets và Google Calendar giữ dữ liệu nguồn, truy cập qua quyền Google của người dùng.
-- Cấu hình file/lịch trong ứng dụng; không đưa dữ liệu học sinh, token hoặc khóa bí mật vào repository.
-- Đọc [hướng dẫn thiết lập](THIET_LAP.md) trước khi kết nối.
+FullCalendar Standard 6.1.19 được phục vụ từ `assets/vendor`, giấy phép MIT kèm tại [FULLCALENDAR_LICENSE.md](assets/vendor/FULLCALENDAR_LICENSE.md). Các phần lịch, biểu mẫu và cài đặt được chia module.
 
-## Hiệu năng 0.3.1
-
-- Cài đặt, bảng và lịch chỉ tải mã khi cần.
-- Đọc chung 8 bảng của nguồn đang chọn bằng một yêu cầu Sheets khi vào ứng dụng; chuẩn bị lịch mặc định song song. Chuyển mục dùng dữ liệu trong phiên, kể cả mục chưa từng mở. Nguồn khác tải khi bạn chọn nguồn đó.
-- Giữ tối đa 12 màn hình đã mở trong phiên; khi quay lại giữ bộ lọc, trang hiện tại và vị trí cuộn. Dữ liệu bảng vẫn được giữ trong phiên khi một màn hình bị loại khỏi bộ nhớ giao diện. Tải lại lấy dữ liệu mới riêng cho mục đang mở; đăng xuất xoá bộ nhớ dữ liệu. Nếu nguồn thiếu hoặc đổi tên tab, ứng dụng thử đọc từng bảng còn hợp lệ.
-- Bảng lớn tạo chỉ mục tìm kiếm trong Web Worker; bảng nhỏ lập chỉ mục một lần. Chỉ cập nhật phần thân bảng, giữ nguyên tiêu đề.
-- Trong Cài đặt → Thông tin độ trễ → Xem số liệu có thời gian chờ Google và xử lý giao diện, không có nội dung dữ liệu hay ID nguồn.
-- Xem [kết quả đo cục bộ](PERFORMANCE.md). Chưa có số đo Google thật trong tài khoản chủ sở hữu.
+GitHub Pages dùng **Deploy from a branch → main → /(root)**. Không dùng GAS backend. Mỗi khách hàng sở hữu bản sao Sheet, Calendar, repository và cấu hình OAuth riêng; không đưa dữ liệu riêng, token hay Client Secret vào repository.

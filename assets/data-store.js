@@ -1,5 +1,5 @@
-import {EXPECTED_TABS} from './config.js?v=0.3.1';
-import {calendarWindow} from './core.js?v=0.3.1';
+import {EXPECTED_TABS} from './config.js?v=0.4.0';
+import {weekWindow,readCalendar} from './calendar-model.js?v=0.4.0';
 
 // Private records live only in this authenticated session, never in browser storage.
 export function createDataStore(getGoogle) {
@@ -35,16 +35,16 @@ export function createDataStore(getGoogle) {
     }).finally(()=>{if(book.reads.get(name)===task)book.reads.delete(name);});
     book.reads.set(name,task);return task;
   }
-  function calendar(source,refresh=false) {
-    const current=calendars.get(source);
+  function calendar(source,refresh=false,window=weekWindow()) {
+    const key=JSON.stringify([source,window.timeMin,window.timeMax]);
+    const current=calendars.get(key);
     if(current?.pending)return current.pending;
     if(!refresh&&current?.data)return Promise.resolve(current.data);
     const session=epoch,entry=current||{};
-    const params=new URLSearchParams({...calendarWindow(),singleEvents:'true',orderBy:'startTime',maxResults:'250',fields:'summary,timeZone,items(summary,start,end),nextPageToken'});
-    const task=getGoogle(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(source)}/events?${params}`).then(data=>{
+    const task=readCalendar(getGoogle,source,window).then(data=>{
       if(session!==epoch)return cancelled();entry.data=data;return data;
     }).finally(()=>{if(entry.pending===task)entry.pending=null;});
-    entry.pending=task;calendars.set(source,entry);return task;
+    entry.pending=task;calendars.set(key,entry);return task;
   }
-  return {table,calendar,clear(){epoch++;books.clear();calendars.clear();}};
+  return {table,calendar,clearCalendar(){calendars.clear();},clear(){epoch++;books.clear();calendars.clear();}};
 }

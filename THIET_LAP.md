@@ -16,15 +16,15 @@ Mỗi người mua sở hữu Sheet, Calendar, repository và website riêng. Ph
 4. Google Auth Platform → Branding → Get started (nếu chưa cấu hình): app name MK English, support/contact email của chủ ứng dụng; Audience External nếu dùng Gmail cá nhân.
 5. Audience → Test users → Add users: thêm email sẽ dùng thử. Giữ Testing trong giai đoạn kiểm thử; việc phát hành cho người mua cần hướng dẫn cấu hình và xét duyệt riêng khi phù hợp.
 6. Data Access → Add or remove scopes: khai báo các phạm vi ứng dụng sử dụng:
-   - https://www.googleapis.com/auth/spreadsheets.readonly
-   - https://www.googleapis.com/auth/calendar.events.readonly
+   - https://www.googleapis.com/auth/spreadsheets
+   - https://www.googleapis.com/auth/calendar.events
    - https://www.googleapis.com/auth/calendar.calendarlist.readonly
 7. Clients → Create client → Web application; tên MK English Web.
 8. Authorized JavaScript origins: thêm https://hgntrancontact-glitch.github.io và http://localhost:5173. Không thêm /mk-english vào origin. Bản sao của người mua dùng domain của chính họ.
-9. Với luồng token phía trình duyệt dự kiến, để trống Authorized redirect URIs. Nếu kiến trúc xác thực sau này thay đổi, phải cập nhật theo triển khai thực tế.
+9. Với luồng token phía trình duyệt hiện tại, để trống Authorized redirect URIs. Nếu kiến trúc xác thực sau này thay đổi, phải cập nhật theo triển khai thực tế.
 10. Create; lưu Client ID (đuôi apps.googleusercontent.com) để cấu hình ứng dụng. Client ID là mã định danh công khai; không gửi hoặc commit Client Secret, token, khóa service account.
 
-Đây là các quyền đọc dành cho bản xem dữ liệu 0.3. Chức năng ghi dữ liệu sẽ cần cấp quyền bổ sung khi được triển khai. Kết nối Drive trong chat không tự cấp quyền cho website.
+Bản 0.4 có nhập dữ liệu và chỉnh lịch nên yêu cầu quyền đọc/ghi Sheets và sự kiện Calendar. Khi nâng cấp từ 0.3, đăng nhập lại và đồng ý các quyền mới trong cửa sổ Google. Kết nối Drive trong chat không tự cấp quyền cho website.
 
 ## Kiểm tra trên website
 
