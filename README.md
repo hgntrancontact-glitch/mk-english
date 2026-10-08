@@ -3,9 +3,9 @@
 
 ## Trạng thái
 
-Đã có màn hình chào và **Tiếp tục với Google**, tự mở Lớp học sau khi đăng nhập với nguồn đã lưu. Sidebar xem 8 bảng và lịch trong 7 ngày tới, tìm kiếm cục bộ, phân trang bảng 100 dòng và bộ nhớ đệm trong phiên. Cài đặt riêng cho việc đổi/thêm nguồn Sheets và Calendar. Không cần GAS cho phần đọc dữ liệu.
+Đã có màn hình chào và **Tiếp tục với Google**, tự mở Lớp học sau khi đăng nhập với nguồn đã lưu. Sidebar xem 8 bảng và lịch trong 7 ngày tới, tìm kiếm cục bộ, phân trang bảng 50 dòng và bộ nhớ đệm trong phiên. Cài đặt riêng cho việc đổi/thêm nguồn Sheets và Calendar. Không cần GAS cho phần đọc dữ liệu.
 
-Đây là bản xem dữ liệu 0.2, **chưa phải ứng dụng quản lý hoàn chỉnh**. Có xem các bảng Điểm danh/Học phí/Chăm sóc; chưa có thao tác ghi, tạo điểm danh, thu phí, chăm sóc, báo cáo hoặc menu Sheets mới. Calendar hiện là danh sách 7 ngày, tối đa 250 sự kiện; chưa có lưới lịch chỉnh sửa. Đã kiểm thử cục bộ với OAuth/API giả lập; chưa xác nhận đăng nhập thật của chủ tài khoản.
+Đây là bản xem dữ liệu 0.3, **chưa phải ứng dụng quản lý hoàn chỉnh**. Có xem các bảng Điểm danh/Học phí/Chăm sóc; chưa có thao tác ghi, tạo điểm danh, thu phí, chăm sóc, báo cáo hoặc menu Sheets mới. Calendar hiện là danh sách 7 ngày, tối đa 250 sự kiện; chưa có lưới lịch chỉnh sửa. Đã kiểm thử cục bộ với OAuth/API giả lập; chưa xác nhận đăng nhập thật của chủ tài khoản.
 
 ## Mở và thử kết nối
 
@@ -20,7 +20,7 @@ Website chỉ yêu cầu quyền đọc trong bản này. Token chỉ ở bộ n
 
 ## Kiểm thử
 
-`npm test` chạy 6 kiểm thử bộ xử lý link, cấu hình, lỗi API và khoảng lịch. Không cần cài dependency. Kiểm thử trình duyệt cục bộ bổ sung đã chạy 12 nhóm với Google giả lập, gồm mở dữ liệu tự động, bộ nhớ đệm, hết phiên và phản hồi đến sau đăng xuất; các kết quả này không đo độ trễ Google thật.
+`npm test` chạy 6 kiểm thử bộ xử lý link, cấu hình, lỗi API và khoảng lịch. Không cần cài dependency. Kiểm thử trình duyệt cục bộ bổ sung đã chạy 15 nhóm với Google giả lập, gồm mở dữ liệu tự động, bộ nhớ đệm, hết phiên và phản hồi đến sau đăng xuất; các kết quả này không đo độ trễ Google thật.
 
 ## Hướng triển khai
 
@@ -28,3 +28,11 @@ Website chỉ yêu cầu quyền đọc trong bản này. Token chỉ ở bộ n
 - Google Sheets và Google Calendar giữ dữ liệu nguồn, truy cập qua quyền Google của người dùng.
 - Cấu hình file/lịch trong ứng dụng; không đưa dữ liệu học sinh, token hoặc khóa bí mật vào repository.
 - Đọc [hướng dẫn thiết lập](THIET_LAP.md) trước khi kết nối.
+
+## Hiệu năng 0.3
+
+- Cài đặt, bảng và lịch chỉ tải mã khi cần.
+- Giữ tối đa 6 màn hình đã mở trong phiên; khi quay lại giữ bộ lọc, trang hiện tại và vị trí cuộn. Không tải lại dữ liệu nếu người dùng chưa bấm Tải lại.
+- Bảng lớn tạo chỉ mục tìm kiếm trong Web Worker; bảng nhỏ lập chỉ mục một lần. Chỉ cập nhật phần thân bảng, giữ nguyên tiêu đề.
+- Trong Cài đặt → Thông tin độ trễ → Xem số liệu có thời gian chờ Google và xử lý giao diện, không có nội dung dữ liệu hay ID nguồn.
+- Xem [kết quả đo cục bộ](PERFORMANCE.md). Chưa có số đo Google thật trong tài khoản chủ sở hữu.

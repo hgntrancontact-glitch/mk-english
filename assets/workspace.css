@@ -28,6 +28,8 @@
 .sidebar #settings-nav { margin-top:20px; border-top:1px solid var(--border); padding-top:18px; border-radius:0; }
 .view-controls { display:flex; align-items:end; gap:16px; margin-bottom:18px; }
 .view-controls > input { max-width:360px; }
+.table-controls { width:min(360px,100%); }
+.advanced pre { white-space:pre-wrap; font-size:12px; max-height:320px; overflow:auto; }
 .view-controls label { margin-top:0; }
 .source-switch { min-width:190px; }
 .data-card { padding:0; overflow:hidden; }
