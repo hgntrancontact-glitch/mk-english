@@ -2,11 +2,13 @@
 
 ## GitHub Pages
 
-Trong repository, mở Settings → Pages. Ở Build and deployment → Source, chọn GitHub Actions. Quy trình build/deploy sẽ được bổ sung cùng ứng dụng; chọn nguồn này chưa có nghĩa website đã chạy.
+Trong repository, mở Settings → Pages. Ở Build and deployment → Source, chọn Deploy from a branch → main → /(root), rồi Save. Đây là cách phát hành dự kiến cho bộ website tĩnh. Khi có mã website sẵn sàng, đẩy mã lên main sẽ cập nhật Pages. Hiện repository mới có tài liệu; chọn nguồn này chưa có nghĩa ứng dụng đã chạy.
 
 Không cần GitHub Pro cho repository Public.
 
 ## Google Cloud
+
+Mỗi người mua sở hữu Sheet, Calendar, repository và website riêng. Phần kết nối dữ liệu của website dùng Google API trực tiếp, không dùng GAS. Mỗi website độc lập cần cấu hình OAuth phù hợp với địa chỉ của mình. Cloud Console chỉ dùng lúc thiết lập; người dùng sử dụng website sẽ đăng nhập Google, cấp quyền rồi nhập link Sheet/Calendar.
 
 1. Đăng nhập https://console.cloud.google.com/ bằng tài khoản quản lý Sheets/Calendar.
 2. Tạo project tên MK English Web và chọn project này.
