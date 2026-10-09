@@ -1,7 +1,8 @@
-import {DEFAULT_CLIENT_ID,DEFAULT_ORIGIN,SCOPES} from './config.js?v=0.4.0';
-import {validClientId,readSettings,apiError,importSetup} from './core.js?v=0.4.0';
-import {$} from './dom.js?v=0.4.0';
-import {recordTiming} from './timing.js?v=0.4.0';
+import {DEFAULT_CLIENT_ID,DEFAULT_ORIGIN,SCOPES} from './config.js?v=0.5.0';
+import {validClientId,readSettings,apiError,importSetup} from './core.js?v=0.5.0';
+import {$,el} from './dom.js?v=0.5.0';
+import {recordTiming} from './timing.js?v=0.5.0';
+import {closePanel,editing} from './panel.js?v=0.5.0';
 
 const storageKey = `mk-english:${location.pathname}:connections:v1`;
 const ownOrigin = location.origin === DEFAULT_ORIGIN || ['localhost','127.0.0.1'].includes(location.hostname);
@@ -16,11 +17,11 @@ let menuClosed=matchMedia('(max-width:680px)').matches;
 function setMenu(){ $('app-shell').classList.toggle('menu-closed',menuClosed);menuButton.textContent=menuClosed?'Mở menu':'Đóng menu';menuButton.setAttribute('aria-expanded',String(!menuClosed));window.dispatchEvent(new Event('resize')); }
 menuButton.onclick=()=>{menuClosed=!menuClosed;setMenu();};setMenu();
 function loadWorkspace(){
-  if(!workspacePromise) workspacePromise=import('./workspace.js?v=0.4.0').then(({createWorkspace})=>{workspace=createWorkspace({getGoogle,getSettings:()=>settings,onSettings:showSettings,onError:message=>notice(message,true)});return workspace;}).catch(error=>{workspacePromise=null;throw error;});
+  if(!workspacePromise) workspacePromise=import('./workspace.js?v=0.5.0').then(({createWorkspace})=>{workspace=createWorkspace({getGoogle,getSettings:()=>settings,onSettings:showSettings,onError:message=>notice(message,true)});return workspace;}).catch(error=>{workspacePromise=null;throw error;});
   return workspacePromise;
 }
 function loadSettings(){
-  if(!settingsPromise) settingsPromise=import('./settings.js?v=0.4.0').then(({initSettings})=>{settingsModule=initSettings({getSettings:()=>settings,persist,connected,getGeneration:()=>generation,getGoogle,notice});return settingsModule;}).catch(error=>{settingsPromise=null;throw error;});
+  if(!settingsPromise) settingsPromise=import('./settings.js?v=0.5.0').then(({initSettings})=>{settingsModule=initSettings({getSettings:()=>settings,persist,connected,getGeneration:()=>generation,getGoogle,notice});return settingsModule;}).catch(error=>{settingsPromise=null;throw error;});
   return settingsPromise;
 }
 
@@ -33,6 +34,8 @@ if (setup !== null) {
 }
 
 function showSettings() {
+  if(editing()){notice('Hoàn tất hoặc đóng biểu mẫu đang nhập trước khi mở Cài đặt.',true);return;}
+  closePanel();
   screenEpoch++;workspace?.leave();
   loadSettings().catch(()=>notice('Không tải được Cài đặt. Kiểm tra mạng rồi mở lại mục này.',true));
   $('welcome').hidden=true;$('app-shell').hidden=false;$('data-screen').hidden=true;$('connections').hidden=false;
@@ -54,7 +57,8 @@ $('back-workspace').onclick=enterWorkspace;
 $('sidebar-signout').onclick=()=>{disconnect();notice('');};
 
 function notice(message, error = false) {
-  $('notice').textContent = message;
+  $('notice').replaceChildren();
+  if(message){const text=el('span',message),dismiss=el('button','Đóng thông báo');dismiss.onclick=()=>notice('');$('notice').append(text,dismiss);}
   $('notice').className = `notice floating-notice${error ? ' error' : ''}`;
   $('notice').hidden = !message;
 }
@@ -85,7 +89,7 @@ function disconnect() {
   activeReads.clear();
   ['sheet-preview','calendar-preview','calendar-choices'].forEach(id => $(id).replaceChildren());
   workspace?.clear();showWelcome();
-  document.querySelectorAll('.entry-dialog').forEach(dialog=>{dialog.close();dialog.remove();});
+  closePanel(true);
   refreshAuth();
 }
 

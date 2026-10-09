@@ -1,3 +1,15 @@
+# Bố cục CRM 0.5.0 — 09/10/2026
+
+Danh sách là vùng làm việc chính, có nhóm trạng thái, bộ lọc cục bộ, sắp xếp theo cột và chọn cột hiển thị. Hồ sơ/biểu mẫu mở cạnh danh sách; trên điện thoại dùng vùng nội dung riêng. Không dùng hộp thoại nhập liệu nổi giữa màn hình. Tách crm-model, panel, loading-view và entry-panel để chia trách nhiệm giao diện; tách file không tự giảm độ trễ Google.
+
+Giữ cách đọc chung 8 bảng, cache dữ liệu/DOM và tìm kiếm Worker. Các bộ lọc, đổi cột, xem hồ sơ và chuyển lại bảng dùng dữ liệu trong phiên. Lần đầu hiển thị khung bảng và trạng thái đồng bộ nhỏ; đây là cải tiến trình bày khi chờ, không phải giảm thời gian API.
+
+22 unit tests + 17 nhóm browser kết nối + 12 nhóm browser giao diện/nhập liệu PASS với Google giả lập, không có pageerror. Bao gồm lưu dữ liệu, bộ lọc/cột, hồ sơ đủ trường, bảo toàn bản nhập khi chuyển mục, mobile và thông báo có thể đóng. Đã kiểm tra ảnh desktop, hồ sơ, biểu mẫu, lịch và điện thoại. Chưa thử đăng nhập hoặc ghi Google thật.
+
+Lượt thử cục bộ bảng nhỏ 2 dòng, cố ý trì hoãn batch Google 1 giây: chuyển đủ 8 mục sau batch đầu không tạo yêu cầu Google mới; thời gian trong trang gồm khung hình kế tiếp 2–43 ms. Không phải số đo Google thật hay cam kết cho dữ liệu lớn. Các số đo bên dưới là lịch sử.
+
+---
+
 # Giao diện và nhập liệu 0.4.0
 
 Giữ cách đọc chung 8 bảng của 0.3.1. Bổ sung menu thu gọn, Arial và giao diện trắng/xám. Lịch dùng FullCalendar Standard, tải riêng; dữ liệu lịch tải theo khoảng đang xem, có phân trang API. Biểu mẫu chỉ lấy cấu trúc/ô chọn khi người dùng mở Nhập dữ liệu. Trước lưu, đọc lại các cột, dữ liệu liên kết và dòng trống; việc kiểm tra này có chi phí mạng nhưng không chạy ở mỗi lần chuyển mục.

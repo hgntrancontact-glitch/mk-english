@@ -4,5 +4,5 @@ export function recordTiming(phase,ms,detail={}) {
   if(entries.length>100)entries.shift();
 }
 export function timingReport() {
-  return JSON.stringify({version:'0.4.0',measurements:entries},null,2);
+  return JSON.stringify({version:'0.5.0',measurements:entries},null,2);
 }

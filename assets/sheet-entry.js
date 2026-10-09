@@ -1,4 +1,4 @@
-import {EXPECTED_TABS} from './config.js?v=0.4.0';
+import {EXPECTED_TABS} from './config.js?v=0.5.0';
 
 export const requiredFields={
   'Lớp học':['Mã nhóm lớp','Lớp học'], 'Học sinh':['Mã học sinh','Họ tên','Mã nhóm lớp'],
