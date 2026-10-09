@@ -1,3 +1,13 @@
+# Giữ phiên trong tab 0.6.0 — 09/10/2026
+
+Không bổ sung backend. Lưu access token ngắn hạn trong sessionStorage, gắn Client ID và các quyền đã cấp, giữ nguyên mốc hết hạn từ lần đăng nhập. Tải lại trang khôi phục token còn hạn và tự mở ứng dụng. Hết hạn/401/đăng xuất xoá token. Nếu browser chặn sessionStorage, trang hiện tại vẫn dùng token trong RAM.
+
+Nút Tiếp tục với Google dùng `prompt: ''`; chỉ Đổi tài khoản dùng `select_account`. Không tự gọi popup nền hoặc tự kéo dài quyền truy cập. [Google TokenClient](https://developers.google.com/identity/oauth2/web/reference/js-reference#TokenClientConfig).
+
+25 unit tests; 20 nhóm browser kết nối/chuyển mục/khôi phục; 12 nhóm nhập liệu/CRM. Google giả lập, không thử ghi dữ liệu thật. Khôi phục phiên giúp tránh bước kết nối lại khi F5, không giảm thời gian đọc dữ liệu Google và không bảo đảm giữ đăng nhập sau khi đóng tab hoặc token hết hạn.
+
+---
+
 # Bố cục CRM 0.5.0 — 09/10/2026
 
 Danh sách là vùng làm việc chính, có nhóm trạng thái, bộ lọc cục bộ, sắp xếp theo cột và chọn cột hiển thị. Hồ sơ/biểu mẫu mở cạnh danh sách; trên điện thoại dùng vùng nội dung riêng. Không dùng hộp thoại nhập liệu nổi giữa màn hình. Tách crm-model, panel, loading-view và entry-panel để chia trách nhiệm giao diện; tách file không tự giảm độ trễ Google.

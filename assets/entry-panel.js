@@ -1,7 +1,7 @@
-import {el} from './dom.js?v=0.5.0';
-import {openPanel} from './panel.js?v=0.5.0';
-import {CRM,groupFields} from './crm-model.js?v=0.5.0';
-import {readEntryBook,saveEntry,requiredFields,feeSystemFields} from './sheet-entry.js?v=0.5.0';
+import {el} from './dom.js?v=0.6.0';
+import {openPanel} from './panel.js?v=0.6.0';
+import {CRM,groupFields} from './crm-model.js?v=0.6.0';
+import {readEntryBook,saveEntry,requiredFields,feeSystemFields} from './sheet-entry.js?v=0.6.0';
 
 export async function openEntry({api,source,name,onSaved}){
   const frame=openPanel(CRM[name]?.add||`Thêm ${name.toLowerCase()}`),{body,actions,panel}=frame,status=el('p','Đang lấy các trường nhập…','entry-status');body.append(status);

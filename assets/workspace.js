@@ -1,10 +1,10 @@
-import {EXPECTED_TABS} from './config.js?v=0.5.0';
-import {createDataStore} from './data-store.js?v=0.5.0';
-import {$,el} from './dom.js?v=0.5.0';
-import {recordTiming} from './timing.js?v=0.5.0';
-import {CRM} from './crm-model.js?v=0.5.0';
-import {editing,closePanel} from './panel.js?v=0.5.0';
-import {loadingView} from './loading-view.js?v=0.5.0';
+import {EXPECTED_TABS} from './config.js?v=0.6.0';
+import {createDataStore} from './data-store.js?v=0.6.0';
+import {$,el} from './dom.js?v=0.6.0';
+import {recordTiming} from './timing.js?v=0.6.0';
+import {CRM} from './crm-model.js?v=0.6.0';
+import {editing,closePanel} from './panel.js?v=0.6.0';
+import {loadingView} from './loading-view.js?v=0.6.0';
 
 const MAX_VIEWS=12;
 export function createWorkspace({getGoogle,getSettings,onSettings,onError}) {
@@ -23,7 +23,7 @@ export function createWorkspace({getGoogle,getSettings,onSettings,onError}) {
     const name=page,source=selectedSources.get(name);if(!source)return onSettings();
     if(name==='Thời khoá biểu'){activeView?.add?.();return;}
     const button=$('add-record');button.disabled=true;
-    try{const {openEntry}=await import('./entry-panel.js?v=0.5.0');await openEntry({api:getGoogle,source,name,onSaved:async()=>{epoch++;revision++;disposeViews();await open(name);}});}
+    try{const {openEntry}=await import('./entry-panel.js?v=0.6.0');await openEntry({api:getGoogle,source,name,onSaved:async()=>{epoch++;revision++;disposeViews();await open(name);}});}
     catch(error){onError(error.message);}finally{button.disabled=false;}
   };
   function disposeViews(){for(const view of views.values())view.destroy();views.clear();pending.clear();activeView=null;store.clear();warming=false;}
@@ -42,7 +42,7 @@ export function createWorkspace({getGoogle,getSettings,onSettings,onError}) {
     if(pending.has(key))return pending.get(key);
     if(!refresh&&views.has(key))return Promise.resolve(views.get(key));
     const session=epoch,isCalendar=name==='Thời khoá biểu';
-    const module=isCalendar?import('./calendar-view.js?v=0.5.0'):import('./table.js?v=0.5.0');
+    const module=isCalendar?import('./calendar-view.js?v=0.6.0'):import('./table.js?v=0.6.0');
     const data=isCalendar?store.calendar(source,refresh):store.table(source,name,refresh);
     const task=Promise.all([data,module]).then(([data,{createView}])=>{
       if(session!==epoch)return null;

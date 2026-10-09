@@ -1,5 +1,5 @@
-import {EXPECTED_TABS} from './config.js?v=0.5.0';
-import {weekWindow,readCalendar} from './calendar-model.js?v=0.5.0';
+import {EXPECTED_TABS} from './config.js?v=0.6.0';
+import {weekWindow,readCalendar} from './calendar-model.js?v=0.6.0';
 
 // Private records live only in this authenticated session, never in browser storage.
 export function createDataStore(getGoogle) {

@@ -2,7 +2,9 @@
 
 Website quản lý lớp học trên GitHub Pages, kết nối trực tiếp Google Sheets và Google Calendar.
 
-## Bản 0.5.0
+## Bản 0.6.0
+
+- Tải lại cùng tab tự khôi phục kết nối Google khi access token còn hạn. Không thêm backend/dịch vụ mới. Chỉ yêu cầu chọn tài khoản lại khi bấm Đổi tài khoản.
 
 - Bố cục CRM toàn trang, Arial, nút chữ, menu trái chia Đào tạo / Tài chính / Chăm sóc và có thể đóng/mở.
 - Danh sách có nhóm trạng thái, tìm kiếm, bộ lọc, sắp xếp theo cột và hai chế độ Gọn / Tất cả cột. Chọn một dòng mở hồ sơ đầy đủ bên phải.
@@ -10,7 +12,7 @@ Website quản lý lớp học trên GitHub Pages, kết nối trực tiếp Goo
 - Nút **Thêm lớp học**, **Thêm học sinh**, **Ghi nhận học phí**… mở khung nhập bên cạnh danh sách, theo tiêu đề cột và ô chọn thực tế của Sheet. Các cột công thức được tự giữ/copy sang dòng trống, không yêu cầu người dùng nhập lại.
 - Kiểm tra mã lớp/học sinh liên kết và dữ liệu trùng trước khi ghi. Học phí xác nhận đã nhận tiền: ghi Học phí và Quản lý Thu Chi trong một yêu cầu batch.
 - Thời khoá biểu có lưới **Ngày / Tuần / Tháng**, chuyển khoảng ngày, tìm kiếm, thêm lịch và sửa buổi đang chọn. Sửa lịch dùng ETag để phát hiện thay đổi đồng thời.
-- Nhiều nguồn có thể cấu hình riêng trong Cài đặt. Dữ liệu và token chỉ nằm trong bộ nhớ phiên, không được đưa lên GitHub hay lưu localStorage.
+- Nhiều nguồn có thể cấu hình riêng trong Cài đặt. Dữ liệu bảng chỉ ở bộ nhớ. Access token được giữ tạm trong sessionStorage của tab tới hạn Google cấp (tối đa một giờ, trừ 30 giây dự phòng); không lưu vào localStorage hoặc GitHub. Không lưu refresh token hay Client Secret.
 
 ## Sử dụng
 
@@ -30,11 +32,12 @@ Website quản lý lớp học trên GitHub Pages, kết nối trực tiếp Goo
 - Chống bấm lặp, kiểm tra trùng trước lưu, dấu giao dịch/dòng qua developer metadata trong cùng batch. Web Locks giới hạn các lần lưu cùng nguồn trên cùng trình duyệt. Dấu dòng/giao dịch duy nhất giúp các phiên web tránh cùng ghi vào một dòng. Đây không phải khoá toàn bộ Google Sheets: người đang sửa trực tiếp Sheet vẫn có thể thay đổi ô trong khoảng giữa lúc đọc và ghi. Không nên sửa cùng dòng đồng thời ở hai nơi.
 - Calendar hiển thị theo múi giờ thiết bị; sửa lịch lặp áp dụng buổi đang chọn. Chưa chỉnh cả chuỗi, xoá lịch, kéo thả, khách mời hoặc Google Meet. Màu theo màu sự kiện nếu được đặt; màu lịch mặc định dùng xám, chưa lấy cấu hình màu riêng của Calendar.
 - Lần vào đầu, đổi nguồn và tải lại cần chờ Google. Chưa có đồng bộ đẩy tức thời.
+- Giữ phiên chỉ áp dụng trong tab và thời hạn token; không phải đăng nhập nhiều ngày. Hết hạn, nhận lỗi 401 hoặc đăng xuất thì xoá token đã lưu. Khi đóng tab, sessionStorage thường bị xoá; cơ chế khôi phục tab của trình duyệt có thể giữ lại, nhưng ứng dụng vẫn kiểm tra hạn token. Nối lại cần thao tác người dùng, không tự bật popup. Script cùng origin có thể đọc sessionStorage; đây là thông tin xác thực tạm thời của người dùng.
 - Đã kiểm thử cục bộ với Google giả lập và kiểm tra hình ảnh. Chưa tự thực hiện ghi thử trên dữ liệu thật của chủ tài khoản.
 
 ## Kiểm thử và thư viện
 
-`npm test` chạy 22 bài kiểm thử. Đã chạy thêm 17 nhóm kiểm thử kết nối/chuyển mục và 12 nhóm giao diện/nhập liệu với Google giả lập, không ghi dữ liệu thật.
+`npm test` chạy 25 bài kiểm thử. Đã chạy thêm 20 nhóm kiểm thử kết nối/chuyển mục/khôi phục phiên và 12 nhóm giao diện/nhập liệu với Google giả lập, không ghi dữ liệu thật.
 
 FullCalendar Standard 6.1.19 được phục vụ từ `assets/vendor`, giấy phép MIT kèm tại [FULLCALENDAR_LICENSE.md](assets/vendor/FULLCALENDAR_LICENSE.md). Các phần lịch, biểu mẫu và cài đặt được chia module.
 

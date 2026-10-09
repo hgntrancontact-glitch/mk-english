@@ -24,7 +24,7 @@ Mỗi người mua sở hữu Sheet, Calendar, repository và website riêng. Ph
 9. Với luồng token phía trình duyệt hiện tại, để trống Authorized redirect URIs. Nếu kiến trúc xác thực sau này thay đổi, phải cập nhật theo triển khai thực tế.
 10. Create; lưu Client ID (đuôi apps.googleusercontent.com) để cấu hình ứng dụng. Client ID là mã định danh công khai; không gửi hoặc commit Client Secret, token, khóa service account.
 
-Bản 0.5 có nhập dữ liệu và chỉnh lịch nên yêu cầu quyền đọc/ghi Sheets và sự kiện Calendar. Khi nâng cấp từ 0.3, đăng nhập lại và đồng ý các quyền mới trong cửa sổ Google. Kết nối Drive trong chat không tự cấp quyền cho website.
+Bản 0.6 có nhập dữ liệu và chỉnh lịch nên yêu cầu quyền đọc/ghi Sheets và sự kiện Calendar. Khi nâng cấp từ 0.3, đăng nhập lại và đồng ý các quyền mới trong cửa sổ Google. Kết nối Drive trong chat không tự cấp quyền cho website. Bản này giữ access token trong sessionStorage để tải lại cùng tab không phải kết nối lại khi token còn hạn; không cần Cloudflare, backend, Client Secret hoặc redirect URI mới.
 
 ## Kiểm tra trên website
 

@@ -1,4 +1,4 @@
-import {$,el} from './dom.js?v=0.5.0';
+import {$,el} from './dom.js?v=0.6.0';
 export function editing(){return Boolean($('entry-host').querySelector('[data-kind="edit"]'));}
 export function closePanel(force=false){
   const host=$('entry-host'),panel=host.firstElementChild;

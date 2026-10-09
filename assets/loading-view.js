@@ -1,5 +1,5 @@
-import {el} from './dom.js?v=0.5.0';
-import {CRM} from './crm-model.js?v=0.5.0';
+import {el} from './dom.js?v=0.6.0';
+import {CRM} from './crm-model.js?v=0.6.0';
 export function loadingView(name){
   const root=el('div',undefined,'loading-view');root.setAttribute('aria-busy','true');
   const status=el('p',name==='Thời khoá biểu'?'Đang kết nối lịch Google…':'Đang đồng bộ dữ liệu Google…','sync-status');status.setAttribute('role','status');root.append(status);

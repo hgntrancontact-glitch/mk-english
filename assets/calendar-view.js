@@ -1,6 +1,6 @@
-import {el} from './dom.js?v=0.5.0';
-import {weekWindow,saveCalendarEvent} from './calendar-model.js?v=0.5.0';
-import {openPanel,editing} from './panel.js?v=0.5.0';
+import {el} from './dom.js?v=0.6.0';
+import {weekWindow,saveCalendarEvent} from './calendar-model.js?v=0.6.0';
+import {openPanel,editing} from './panel.js?v=0.6.0';
 
 if(!window.FullCalendar)await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=new URL('./vendor/fullcalendar.js',import.meta.url).href;script.onload=resolve;script.onerror=()=>reject(new Error('Chưa tải được giao diện lịch. Kiểm tra mạng và tải lại trang.'));document.head.append(script);});
 const localValue=date=>{const d=new Date(date);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);};
